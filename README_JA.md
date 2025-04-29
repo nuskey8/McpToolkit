@@ -7,9 +7,9 @@ Lightweight, fast, NativeAOT compatible MCP (Model Context Protocol) framework f
 [![Releases](https://img.shields.io/github/release/nuskey8/McpToolkit.svg)](https://github.com/nuskey8/McpToolkit/releases)
 [![license](https://img.shields.io/badge/LICENSE-MIT-green.svg)](LICENSE)
 
-English | [日本語](./README_JA.md)
+[English](./README.md) | 日本語
 
-MCP Toolkit for .NET is a framework for building MCP (Model Context Protocol) servers/clients in .NET. By leveraging Source Generators, it enables the creation of MCP servers/clients with minimal C# code.
+MCP Toolkit for .NETは.NETでMCP(Model Context Protocol)サーバー/クライアントを構築するためのフレームワークです。Source Generatorを活用した設計により、最小限のC#コードでMCPサーバー/クライアントを作成することが可能になります。
 
 ```cs
 using McpToolkit;
@@ -27,20 +27,21 @@ await Task.Delay(TimeSpan.Infinite)
 ```
 
 > [!CAUTION]
-> MCP Toolkit for .NET is currently in alpha and may introduce breaking changes without notice. Additionally, the following features are under development and not yet supported:
+> MCP Toolkit for .NETは現在アルファ版であり、予告なく破壊的変更が行われる可能性があります。また、以下の機能は現在作業が進行中であり、対応したAPIが提供されていません。
 > 
 > * Streamable HTTP Transport
 > * Authorization
 > * Cancellation
 > * Progress
+> * Logging
 
 ## Why not C# SDK?
 
-An [official C# SDK](https://github.com/modelcontextprotocol/csharp-sdk) for the Model Context Protocol already exists. So why use MCP Toolkit?
+Model Context Protocolにはすでに[公式のC# SDK](https://github.com/modelcontextprotocol/csharp-sdk)が提供されています。ではなぜこのMCP Toolkitを利用するのでしょうか？
 
 ### Clear and Easy to Use API
 
-MCP Toolkit fully utilizes Source Generators to provide an intuitive and user-friendly API. Below is a comparison of implementing the same MCP server using the C# SDK and MCP Toolkit.
+MCP ToolkitはSource Generatorを全面的に活用し、直感的で扱いやすいAPIの提供に重点を置いています。以下はC# SDKとMCP Toolkitで同様のMCPサーバーを実装したコードの比較です。
 
 ```cs
 // C# SDK
@@ -82,29 +83,29 @@ await server.ConnectAsync(new StdioServerTransport());
 await Task.Delay(TimeSpan.Infinite);
 ```
 
-MCP Toolkit analyzes the lambda expressions passed to `server.Tools.Add()` and generates the necessary source code. It also supports adding tools at the class level, similar to the C# SDK.
+MCP Toolkitでは`server.Tools.Add()`の引数のラムダ式を解析し、必要なソースコードを生成します。もちろんC# SDK同様にクラス単位でのToolの追加にも対応しています。
 
 ### Zero Dependency
 
-Unlike the C# SDK, which depends on `Microsoft.Extensions.AI` and `Microsoft.Extensions.Hosting`, MCP Toolkit has no external dependencies.
+C# SDKが`Microsoft.Extensions.AI`および`Microsoft.Extensions.Hosting`に依存しているのに対し、MCP Toolkitは外部ライブラリに一切依存していません。
 
-While MCP is a protocol for integrating LLMs with applications, MCP itself is a simple JSON-RPC and does not inherently include LLM-related features. Therefore, the functionality provided by `Microsoft.Extensions.AI` is unnecessary for implementing a basic MCP server, making it an unnecessary dependency.
+MCPはLLMとアプリケーションを統合するためのプロトコルですが、MCPそのものは単純なJSON-RPCであり、LLMに直接関連した機能は保持していません。そのため単純なMCPサーバーの実装であれば`Microsoft.Extensions.AI`の機能は不要であり、不必要な依存であると考えます。
 
-Integration with `Microsoft.Extensions.Hosting` is optional in MCP Toolkit and is provided as an extension package. `Microsoft.Extensions.Hosting` is a large package, and its dependency can significantly increase binary size, especially in Native AOT scenarios. While Generic Host is powerful for web application implementations, it is not essential for implementing local MCP servers/clients.
+また、`Microsoft.Extensions.Hosting`との統合はMCP Toolkitではオプションであり、拡張パッケージとして提供されています。`Microsoft.Extensions.Hosting`は巨大なパッケージであり、これへの依存は特にNative AOTにおいてバイナリサイズの増加につながります。Generic HostはWebアプリケーションの実装には強力ですが、ローカルで動作するMCPサーバー/クライアントの実装には必須ではありません。
 
 ### NativeAOT Compatible
 
-MCP Toolkit does not perform any dynamic code generation, making it fully compatible with Native AOT. This allows for reduced binary size and startup time through AOT compilation.
+MCP Toolkitは動的なコード生成を一切行わないため、Native AOTに完全に対応しています。これによりAOTコンパイルを利用したバイナリサイズや起動時間の削減を行うことが可能になります。
 
-## Requirements
+## 要件
 
-MCP Toolkit requires .NET 8 or later. All necessary packages are available on NuGet.
+MCP Toolkitを利用するには.NET 8以上が必要です。必要なパッケージは全てNuGetから入手できます。
 
 ## Getting Started (Server)
 
-### Installation
+### インストール
 
-To implement an MCP server, you need the `McpToolkit.Server` package.
+MCPサーバーの実装を行うには`McpToolkit.Server`パッケージが必要です。
 
 #### .NET CLI
 
@@ -118,9 +119,9 @@ dotnet add package McpToolkit.Server
 Install-Package McpToolkit.Server
 ```
 
-### Quick Start
+### クイックスタート
 
-You can easily implement an MCP server using `McpServer`.
+`McpServer`を用いてMCPサーバーを簡単に実装できます。
 
 ```cs
 await using server = new McpServer
@@ -129,36 +130,36 @@ await using server = new McpServer
     Version = "1.0.0",
 };
 
-// Add tools
+// Toolの追加
 server.Tools.Add("foo", "Sample tool.", (string message) =>
 {
     return $"test message: {message}";
 })
 
-// Use stdio as the transport
+// stdioをTransportに利用
 await server.ConnectAsync(new StdioServerTransport());
 
-// Wait for client requests
+// Clientからのリクエストを待機
 await Task.Delay(TimeSpan.Infinite);
 ```
 
 ### Tool
 
-You can add tools using `server.Tools.Add()`.
+`server.Tools.Add()`を用いてToolの追加を行うことができます。
 
 ```cs
-// Add tools
+// Toolの追加
 server.Tools.Add("add", "Add two numbers together.", (double lhs, double rhs) =>
 {
     return lhs + rhs;
 });
 ```
 
-MCP Toolkit's Source Generator analyzes the lambda expressions in `Tools.Add()` and generates appropriate overloads.
+MCP ToolkitのSource Generatorは`Tools.Add()`のラムダ式を解析し、適切なオーバーロードを生成します。
 
 <details>
 
-<summary>Generated Code</summary>
+<summary>生成されたコード</summary>
 
 ```cs
 // <auto-generated/>
@@ -222,7 +223,7 @@ namespace McpToolkit.Server
 
 </details>
 
-You can also register methods from a class. When adding tools using methods, the `<summary>` and `<param>` information from the method's documentation comments is automatically used to generate the `description`.
+また、クラスのメソッドをまとめて登録することも可能です。メソッドを用いてツールを追加する場合、メソッドのドキュメントコメントの`<summary>`および`<param>`の情報から`description`が自動的に生成されます。
 
 ```cs
 server.Tools.Add<Tools>();
@@ -242,9 +243,10 @@ partial class Tools
 }
 ```
 
+
 <details>
 
-<summary>Generated Code</summary>
+<summary>生成されたコード</summary>
 
 ```cs
 // <auto-generated/>
@@ -301,11 +303,11 @@ partial class Tools : global::McpToolkit.IMcpToolProvider
 
 </details>
 
-However, tool arguments are limited to primitive types, `DateTime`, and any `Enum`. The return type can be arbitrary, but non-`Content[]` types are automatically converted to strings. For more complex operations, use the low-level API described later.
+ただし、Toolの引数はプリミティブ型、`DateTime`、任意の`Enum`に限定されています。戻り値の型は任意ですが、`Content[]`以外の場合は自動的に文字列に変換されます。より複雑な処理を行いたい場合は、後述する低レベルAPIを利用してください。
 
 ### Resource
 
-You can add resources using `server.Resources.Add()`.
+`server.Resources.Add()`を用いてResourceを追加できます。
 
 ```cs
 server.Resources.Add("file:///project/src/Program.cs",
@@ -322,7 +324,7 @@ server.Resources.Add("file:///project/src/Program.cs",
 
 ### Prompts
 
-You can add prompts using `server.Prompts.Add()`.
+`server.Prompts.Add()`を用いてPromptを追加できます。
 
 ```cs
 server.Prompts.Add(new Prompt()
@@ -339,9 +341,9 @@ server.Prompts.Add(new Prompt()
 
 ## Getting Started (Client)
 
-### Installation
+### インストール
 
-To implement an MCP client, you need the `McpToolkit.Client` package.
+MCPクライアントの実装を行うには`McpToolkit.Client`パッケージが必要です。
 
 #### .NET CLI
 
@@ -355,9 +357,9 @@ dotnet add package McpToolkit.Client
 Install-Package McpToolkit.Client
 ```
 
-### Quick Start
+### クイックスタート
 
-You can implement an MCP client using `McpClient`.
+`McpClient`を用いてMCPクライアントを実装できます。
 
 ```cs
 using McpToolkit.Client;
@@ -389,10 +391,10 @@ foreach (var result in results)
 
 ## Transport
 
-By implementing `IMcpTransport`, you can replace the transport layer with a custom implementation.
+`IMcpTransport`を実装することでTransport層を任意の実装に置き換えることができます。
 
 > [!NOTE]
-> Currently, only the stdio transport is provided.
+> 現在はstdioのTransportのみが提供されています。
 
 ```cs
 public interface IMcpTransport : IAsyncDisposable
@@ -406,9 +408,9 @@ public interface IMcpTransport : IAsyncDisposable
 }
 ```
 
-## Low-Level API
+## 低レベルAPI
 
-Both servers and clients can use `SetRequestHandler()` and `SetNotificationHandler()` for more granular customization. Note that this replaces the default handlers.
+サーバー/クライアントの両方で`SetRequestHandler()`や`SetNotificationHandler()`を用いたより細かいカスタマイズが可能です。これはデフォルトのハンドラを置き換えることに注意してください。
 
 ```cs
 await using var server = new McpServer();
@@ -436,6 +438,6 @@ server.SetRequestHandler(RequestSchema.ListToolsRequest, async (requestParams, c
 });
 ```
 
-## License
+## ライセンス
 
-This library is released under the [MIT License](./LICENSE).
+このライブラリは[MIT License](./LICENSE)の下で公開されています。
