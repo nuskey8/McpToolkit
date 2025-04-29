@@ -23,7 +23,7 @@ server.Tools.Add("add", "Add two numbers together.", (double lhs, double rhs) =>
 });
 
 await server.ConnectAsync(new StdioServerTransport());
-await Task.Delay(Timeout.Infinite)
+await Task.Delay(Timeout.Infinite);
 ```
 
 > [!CAUTION]
