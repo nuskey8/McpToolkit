@@ -12,10 +12,10 @@ public static class NotificationSchema
         public string Method => method;
     }
 
-    public static readonly INotificationSchema<InitializedNotificationParams> InitializedNotificationSchema = new Schema<InitializedNotificationParams>(McpMethods.Notifications.Initialized);
-    public static readonly INotificationSchema<CancelledNotificationParams> CancelledNotificationSchema = new Schema<CancelledNotificationParams>(McpMethods.Notifications.Cancelled);
-    public static readonly INotificationSchema<PromptListChangedNotificationParams> PromptListChangedNotificationSchema = new Schema<PromptListChangedNotificationParams>(McpMethods.Notifications.PromptListChanged);
-    public static readonly INotificationSchema<ToolListChangedNotificationParams> ToolListChangedNotificationSchema = new Schema<ToolListChangedNotificationParams>(McpMethods.Notifications.ToolListChanged);
-    public static readonly INotificationSchema<ResourceListChangedNotificationParams> ResourceListChangedNotificationSchema = new Schema<ResourceListChangedNotificationParams>(McpMethods.Notifications.ResourceListChanged);
-    public static readonly INotificationSchema<ResourceUpdatedNotificationParams> ResourceUpdatedNotificationSchema = new Schema<ResourceUpdatedNotificationParams>(McpMethods.Notifications.ResourceUpdated);
+    public static readonly INotificationSchema<InitializedNotificationParams> InitializedNotification = new Schema<InitializedNotificationParams>(McpMethods.Notifications.Initialized);
+    public static readonly INotificationSchema<CancelledNotificationParams> CancelledNotification = new Schema<CancelledNotificationParams>(McpMethods.Notifications.Cancelled);
+    public static readonly INotificationSchema<PromptListChangedNotificationParams> PromptListChangedNotification = new Schema<PromptListChangedNotificationParams>(McpMethods.Notifications.PromptListChanged);
+    public static readonly INotificationSchema<ToolListChangedNotificationParams> ToolListChangedNotification = new Schema<ToolListChangedNotificationParams>(McpMethods.Notifications.ToolListChanged);
+    public static readonly INotificationSchema<ResourceListChangedNotificationParams> ResourceListChangedNotification = new Schema<ResourceListChangedNotificationParams>(McpMethods.Notifications.ResourceListChanged);
+    public static readonly INotificationSchema<ResourceUpdatedNotificationParams> ResourceUpdatedNotification = new Schema<ResourceUpdatedNotificationParams>(McpMethods.Notifications.ResourceUpdated);
 }

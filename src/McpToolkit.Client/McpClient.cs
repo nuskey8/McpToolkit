@@ -154,7 +154,7 @@ public class McpClient : IMcpClient
         Roots = new ClientRoots(this);
         Ping = new ClientPing(this);
 
-        this.SetRequestHandler(RequestSchema.ListRootsRequestSchema, DefaultListRootsHandler);
+        this.SetRequestHandler(RequestSchema.ListRootsRequest, DefaultListRootsHandler);
     }
 
     public void SetRequestHandler(string methodName, Func<JsonRpcRequest, CancellationToken, ValueTask<JsonRpcResponse>> handler)

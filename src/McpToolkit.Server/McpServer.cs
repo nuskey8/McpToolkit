@@ -188,15 +188,15 @@ public sealed class McpServer : IMcpServer
         Roots = new ServerRoots(this);
         Sampling = new ServerSampling(this);
 
-        this.SetRequestHandler(RequestSchema.InitializeRequestSchema, DefaultInitializeHandler);
-        this.SetRequestHandler(RequestSchema.PintRequestSchema, DefaultPingHandler);
-        this.SetRequestHandler(RequestSchema.ListPromptsRequestSchema, DefaultListPromptsHandler);
-        this.SetRequestHandler(RequestSchema.GetPromptRequestSchema, DefaultGetPromptHandler);
-        this.SetRequestHandler(RequestSchema.ListToolsRequestSchema, DefaultListToolsHandler);
-        this.SetRequestHandler(RequestSchema.CallToolRequestSchema, DefaultCallToolHandler);
-        this.SetRequestHandler(RequestSchema.ReadResourceRequestSchema, DefaultReadResourceHandler);
-        this.SetRequestHandler(RequestSchema.ListResourcesRequestSchema, DefaultListResourcesHandler);
-        this.SetRequestHandler(RequestSchema.ListResourceTemplatesRequestSchema, DefaultListResourceTemplatesHandler);
+        this.SetRequestHandler(RequestSchema.InitializeRequest, DefaultInitializeHandler);
+        this.SetRequestHandler(RequestSchema.PintRequest, DefaultPingHandler);
+        this.SetRequestHandler(RequestSchema.ListPromptsRequest, DefaultListPromptsHandler);
+        this.SetRequestHandler(RequestSchema.GetPromptRequest, DefaultGetPromptHandler);
+        this.SetRequestHandler(RequestSchema.ListToolsRequest, DefaultListToolsHandler);
+        this.SetRequestHandler(RequestSchema.CallToolRequest, DefaultCallToolHandler);
+        this.SetRequestHandler(RequestSchema.ReadResourceRequest, DefaultReadResourceHandler);
+        this.SetRequestHandler(RequestSchema.ListResourcesRequest, DefaultListResourcesHandler);
+        this.SetRequestHandler(RequestSchema.ListResourceTemplatesRequest, DefaultListResourceTemplatesHandler);
     }
 
     public void SetRequestHandler(string method, Func<JsonRpcRequest, CancellationToken, ValueTask<JsonRpcResponse>> handler)
