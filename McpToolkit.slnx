@@ -1,0 +1,17 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/sandbox/">
+    <Project Path="sandbox/ConsoleApp1/ConsoleApp1.csproj" />
+    <Project Path="sandbox/Server1/Server1.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/McpToolkit.Shared/McpToolkit.Shared.csproj" />
+    <Project Path="src/McpToolkit.Client/McpToolkit.Client.csproj" />
+    <Project Path="src/McpToolkit.Server/McpToolkit.Server.csproj" />
+    <Project Path="src/McpToolkit.Server.SourceGenerator/McpToolkit.Server.SourceGenerator.csproj" />
+  </Folder>
+</Solution>

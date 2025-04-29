@@ -1,0 +1,51 @@
+using System.Text.Json.Serialization;
+
+namespace McpToolkit;
+
+[JsonConverter(typeof(JsonStringEnumConverter<LoggingLevel>))]
+public enum LoggingLevel
+{
+    [JsonStringEnumMemberName("debug")]
+    Debug,
+
+    [JsonStringEnumMemberName("info")]
+    Info,
+
+    [JsonStringEnumMemberName("notice")]
+    Notice,
+
+    [JsonStringEnumMemberName("warning")]
+    Warning,
+
+    [JsonStringEnumMemberName("error")]
+    Error,
+
+    [JsonStringEnumMemberName("critical")]
+    Critical,
+
+    [JsonStringEnumMemberName("alert")]
+    Alert,
+
+    [JsonStringEnumMemberName("emergency")]
+    Emergency
+}
+
+public record SetLevelRequestParams : RequestParams
+{
+    [JsonPropertyName("level")]
+    public required LoggingLevel Level { get; init; }
+}
+
+public record LoggingMessageNotificationParams : RequestParams
+{
+    [JsonPropertyName("level")]
+    public required LoggingLevel Level { get; init; }
+
+    [JsonPropertyName("logger")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Logger { get; init; }
+
+    [JsonPropertyName("data")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public object? Data { get; init; }
+}
