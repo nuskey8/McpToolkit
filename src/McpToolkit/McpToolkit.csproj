@@ -20,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-      <None Include="..\..\docs\Icon.png" Pack="true" PackagePath="\" />
+      <None Include="..\..\docs\Icon.png" Pack="true" PackagePath="Icon.png" />
       <None Include="..\..\README.md" Pack="true" PackagePath="README.md" />
       <EmbeddedResource Include="..\..\LICENSE" />
   </ItemGroup>

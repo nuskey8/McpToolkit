@@ -10,7 +10,7 @@
         <RepositoryType>git</RepositoryType>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageIcon>docs/Icon.png</PackageIcon>
+        <PackageIcon>Icon.png</PackageIcon>
     </PropertyGroup>
 
 </Project>
