@@ -2,7 +2,11 @@ using System.Text.Json.Serialization;
 
 namespace McpToolkit;
 
+#if NET9_0_OR_GREATER
 [JsonConverter(typeof(JsonStringEnumConverter<LoggingLevel>))]
+#else
+[JsonConverter(typeof(PolyfillJsonStringEnumConverter<LoggingLevel>))]
+#endif
 public enum LoggingLevel
 {
     [JsonStringEnumMemberName("debug")]
