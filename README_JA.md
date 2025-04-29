@@ -23,7 +23,7 @@ server.Tools.Add("add", "Add two numbers together.", (double lhs, double rhs) =>
 });
 
 await server.ConnectAsync(new StdioServerTransport());
-await Task.Delay(TimeSpan.Infinite)
+await Task.Delay(Timeout.Infinite)
 ```
 
 > [!CAUTION]
@@ -73,14 +73,14 @@ public static class EchoTool
 using McpToolkit;
 using McpToolkit.Server;
 
-await using server = new McpServer();
+await using var server = new McpServer();
 
 server.Tools.Add("echo",
     "Echoes the message back to the client.",
     (string message) => $"hello {message}");
 
 await server.ConnectAsync(new StdioServerTransport());
-await Task.Delay(TimeSpan.Infinite);
+await Task.Delay(Timeout.Infinite);
 ```
 
 MCP Toolkitでは`server.Tools.Add()`の引数のラムダ式を解析し、必要なソースコードを生成します。もちろんC# SDK同様にクラス単位でのToolの追加にも対応しています。
@@ -124,7 +124,7 @@ Install-Package McpToolkit.Server
 `McpServer`を用いてMCPサーバーを簡単に実装できます。
 
 ```cs
-await using server = new McpServer
+await using var server = new McpServer
 {
     Name = "Sample",
     Version = "1.0.0",

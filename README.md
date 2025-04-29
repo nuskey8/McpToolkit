@@ -72,14 +72,14 @@ public static class EchoTool
 using McpToolkit;
 using McpToolkit.Server;
 
-await using server = new McpServer();
+await using var server = new McpServer();
 
 server.Tools.Add("echo",
     "Echoes the message back to the client.",
     (string message) => $"hello {message}");
 
 await server.ConnectAsync(new StdioServerTransport());
-await Task.Delay(TimeSpan.Infinite);
+await Task.Delay(Timeout.Infinite);
 ```
 
 MCP Toolkit analyzes the lambda expressions passed to `server.Tools.Add()` and generates the necessary source code. It also supports adding tools at the class level, similar to the C# SDK.
@@ -123,7 +123,7 @@ Install-Package McpToolkit.Server
 You can easily implement an MCP server using `McpServer`.
 
 ```cs
-await using server = new McpServer
+await using var server = new McpServer
 {
     Name = "Sample",
     Version = "1.0.0",
@@ -139,7 +139,7 @@ server.Tools.Add("foo", "Sample tool.", (string message) =>
 await server.ConnectAsync(new StdioServerTransport());
 
 // Wait for client requests
-await Task.Delay(TimeSpan.Infinite);
+await Task.Delay(Timeout.Infinite);
 ```
 
 ### Tool
