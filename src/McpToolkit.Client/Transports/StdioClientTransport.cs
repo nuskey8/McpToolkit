@@ -176,8 +176,15 @@ public sealed class StdioClientTransport : IMcpTransport
 
     public ValueTask DisposeAsync()
     {
-        process?.Kill();
-        process?.Dispose();
+        try
+        {
+            process?.KillTree();
+        }
+        finally
+        {
+            process?.Dispose();
+        }
+
         outputChannel?.Writer.TryComplete(null);
         return default;
     }
