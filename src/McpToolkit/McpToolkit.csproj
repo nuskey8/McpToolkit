@@ -1,5 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <ItemGroup>
+    <ProjectReference Include="..\McpToolkit.Client\McpToolkit.Client.csproj" />
+    <ProjectReference Include="..\McpToolkit.Server\McpToolkit.Server.csproj" />
+    <ProjectReference Include="..\McpToolkit.Shared\McpToolkit.Shared.csproj" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
     <LangVersion>13</LangVersion>
@@ -8,9 +14,9 @@
     <IsAotCompatible>true</IsAotCompatible>
 
     <!-- NuGet Packaging -->
-    <PackageId>McpToolkit.Shared</PackageId>
+    <PackageId>McpToolkit</PackageId>
     <PackageTags>mcp;modelcontextprotocol</PackageTags>
-    <Description>Provides shared classes and interfaces used by MCP Toolkit for .NET</Description>
+    <Description>Lightweight, fast, NativeAOT compatible MCP (Model Context Protocol) framework for .NET. This package is meta package that includes McpToolkit.Server and McpToolkit.Client.</Description>
   </PropertyGroup>
 
   <ItemGroup>

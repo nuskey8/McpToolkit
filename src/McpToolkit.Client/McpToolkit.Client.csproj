@@ -10,6 +10,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsAotCompatible>true</IsAotCompatible>
+
+    <!-- NuGet Packaging -->
+    <PackageId>McpToolkit.Client</PackageId>
+    <PackageTags>mcp;modelcontextprotocol</PackageTags>
+    <Description>MCP Toolkit for .NET client package.</Description>
   </PropertyGroup>
+
+  <ItemGroup>
+      <None Include="..\..\docs\Icon.png" Pack="true" PackagePath="\" />
+      <None Include="..\..\README.md" Pack="true" PackagePath="README.md" />
+      <EmbeddedResource Include="..\..\LICENSE" />
+  </ItemGroup>
 
 </Project>

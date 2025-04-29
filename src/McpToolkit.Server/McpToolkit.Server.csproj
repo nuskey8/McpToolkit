@@ -2,6 +2,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\McpToolkit.Shared\McpToolkit.Shared.csproj" />
+    <ProjectReference Include="..\McpToolkit.Server.SourceGenerator\McpToolkit.Server.SourceGenerator.csproj" 
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false"/>
   </ItemGroup>
 
   <PropertyGroup>
@@ -10,6 +13,29 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsAotCompatible>true</IsAotCompatible>
+
+    <!-- NuGet Packaging -->
+    <PackageId>McpToolkit.Server</PackageId>
+    <PackageTags>mcp;modelcontextprotocol</PackageTags>
+    <Description>MCP Toolkit for .NET server package.</Description>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PolySharp" Version="1.14.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <None Include="..\McpToolkit.Server.SourceGenerator\bin\$(Configuration)\netstandard2.0\McpToolkit.Server.SourceGenerator.dll"
+      PackagePath="analyzers\dotnet\cs"
+      Pack="true"
+      Visible="false" />
+  </ItemGroup>
+  
+  <ItemGroup>
+      <None Include="..\..\docs\Icon.png" Pack="true" PackagePath="\" />
+      <None Include="..\..\README.md" Pack="true" PackagePath="README.md" />
+      <EmbeddedResource Include="..\..\LICENSE" />
+  </ItemGroup>
 
 </Project>

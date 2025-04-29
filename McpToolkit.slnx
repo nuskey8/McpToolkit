@@ -13,5 +13,6 @@
     <Project Path="src/McpToolkit.Client/McpToolkit.Client.csproj" />
     <Project Path="src/McpToolkit.Server/McpToolkit.Server.csproj" />
     <Project Path="src/McpToolkit.Server.SourceGenerator/McpToolkit.Server.SourceGenerator.csproj" />
+    <Project Path="src/McpToolkit/McpToolkit.csproj" />
   </Folder>
 </Solution>
