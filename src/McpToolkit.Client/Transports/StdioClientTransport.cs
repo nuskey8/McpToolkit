@@ -76,8 +76,6 @@ public sealed class StdioClientTransport : IMcpTransport
             AllowSynchronousContinuations = true
         });
 
-        var errorList = new List<string>();
-
         var waitOutputDataCompleted = new TaskCompletionSource<object?>();
 
         void OnOutputDataReceived(object sender, DataReceivedEventArgs e)
@@ -94,50 +92,10 @@ public sealed class StdioClientTransport : IMcpTransport
 
         process.OutputDataReceived += OnOutputDataReceived;
 
-        var waitErrorDataCompleted = new TaskCompletionSource<object?>();
-        process.ErrorDataReceived += (sender, e) =>
-        {
-            if (e.Data != null)
-            {
-                lock (errorList)
-                {
-                    errorList.Add(e.Data);
-                }
-            }
-            else
-            {
-                waitErrorDataCompleted.TrySetResult(null);
-            }
-        };
-
         process.Exited += async (sender, e) =>
         {
-            await waitErrorDataCompleted.Task.ConfigureAwait(false);
-
-            if (errorList.Count == 0)
-            {
-                await waitOutputDataCompleted.Task.ConfigureAwait(false);
-            }
-            else
-            {
-                process.OutputDataReceived -= OnOutputDataReceived;
-            }
-
-            if (process.ExitCode != 0)
-            {
-                outputChannel.Writer.TryComplete(new McpProcessException(process.ExitCode, errorList.ToArray()));
-            }
-            else
-            {
-                if (errorList.Count == 0)
-                {
-                    outputChannel.Writer.TryComplete();
-                }
-                else
-                {
-                    outputChannel.Writer.TryComplete(new McpProcessException(process.ExitCode, errorList.ToArray()));
-                }
-            }
+            await waitOutputDataCompleted.Task.ConfigureAwait(false);
+            outputChannel.Writer.TryComplete();
         };
 
         if (!process.Start())
