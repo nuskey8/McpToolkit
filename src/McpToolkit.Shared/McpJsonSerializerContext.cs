@@ -73,6 +73,7 @@ namespace McpToolkit;
 [JsonSerializable(typeof(CallToolResult))]
 [JsonSerializable(typeof(ListToolsRequestParams))]
 [JsonSerializable(typeof(ListToolsResult))]
+[JsonSerializable(typeof(ToolListChangedNotificationParams))]
 public partial class McpJsonSerializerContext : JsonSerializerContext
 {
 }
