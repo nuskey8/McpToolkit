@@ -31,6 +31,7 @@ public sealed class JsonRpcEndpoint(Func<CancellationToken, ValueTask<string?>> 
             {
                 var line = await readFunc(cancellationToken).ConfigureAwait(false);
                 if (string.IsNullOrWhiteSpace(line)) continue;
+                if (!line.StartsWith('{') || !line.EndsWith('}')) continue; // skip non-json input
 
                 var message = JsonSerializer.Deserialize(line, McpJsonSerializerContext.Default.Options.GetTypeInfo<JsonRpcMessage>()!);
 
