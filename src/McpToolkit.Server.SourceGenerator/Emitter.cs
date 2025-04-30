@@ -80,22 +80,28 @@ internal static class Emitter
 
         var invocationExpr = $"{(meta.IsAsync ? "await " : "")}{meta.InvocationSymbol}({string.Join(", ", invocationArgs)})";
 
-        if (meta.ReturnType == "global::McpToolkit.Content[]")
+        if (meta.ReturnTypeName == "global::McpToolkit.Content[]")
         {
             if (meta.IsAsync) builder.AppendLine($"return {invocationExpr};");
             else builder.AppendLine($"return new({invocationExpr});");
         }
-        else if (meta.ReturnType == "global::McpToolkit.Content")
+        else if (meta.ReturnTypeName == "global::McpToolkit.Content")
         {
             if (meta.IsAsync) builder.AppendLine($"return [{invocationExpr}];");
             else builder.AppendLine($"return new([{invocationExpr}]);");
         }
-        else if (meta.ReturnType == null)
+        else if (meta.ReturnTypeName == null)
         {
             builder.AppendLine($"{invocationExpr};");
 
             if (meta.IsAsync) builder.AppendLine("return [];");
             else builder.AppendLine("return new([]);");
+        }
+        else if (meta.ReturnType.Value.AllInterfaces.Any(i =>
+            i.OriginalDefinition.ToDisplayString() == "System.Collections.Generic.IEnumerable<T>"))
+        {
+            if (meta.IsAsync) builder.AppendLine($"return {invocationExpr}.Select(x => (global::McpToolkit.Content)x.ToString()).ToArray();");
+            else builder.AppendLine($"return new({invocationExpr}.Select(x => (global::McpToolkit.Content)x.ToString()).ToArray());");
         }
         else
         {

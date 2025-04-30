@@ -14,10 +14,11 @@ public record ToolMetadata
 {
     public required string Name { get; init; }
     public required string? Description { get; init; }
-    public required string? ReturnType { get; init; }
+    public required string? ReturnTypeName { get; init; }
     public required string InvocationSymbol { get; init; }
     public required EquatableArray<ToolParameter> Parameters { get; init; }
     public required bool IsAsync { get; init; }
+    public required IgnoreEquality<ITypeSymbol> ReturnType { get; init; }
     public required IgnoreEquality<Location> NameSyntaxLocation { get; init; }
 }
 
