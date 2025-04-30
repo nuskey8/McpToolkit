@@ -392,7 +392,7 @@ foreach (var result in results)
 By implementing `IMcpTransport`, you can replace the transport layer with a custom implementation.
 
 > [!NOTE]
-> Currently, only the stdio transport is provided.
+> Currently, Streamable HTTP Transport is not provided. This is planned to be implemented by v1.0.0.
 
 ```cs
 public interface IMcpTransport : IAsyncDisposable
@@ -404,6 +404,33 @@ public interface IMcpTransport : IAsyncDisposable
     ValueTask SendMessageAsync(JsonRpcMessage message, CancellationToken cancellationToken = default);
     ValueTask<JsonRpcResponse> SendRequestAsync(JsonRpcRequest request, CancellationToken cancellationToken = default);
 }
+```
+
+### Standard Input/Output (stdio)
+
+```cs
+// Server
+await using var server = new McpServer();
+await server.ConnectAsync(new StdioServerTransport());
+
+// Client
+await using var client = new McpClient();
+await client.ConnectAsync(new StdioClientTransport()
+{
+    Command = "dotnet",
+    Arguments = "run --project ../ExampleServer/ExampleServer.csproj",
+});
+```
+
+### In-memory
+
+```cs
+await using var server = new McpServer();
+await using var client = new McpClient();
+
+var (serverTransport, clientTransport) = InMemoryTransport.CreateLinkedPair();
+await server.ConnectAsync(serverTransport);
+await client.ConnectAsync(clientTransport);
 ```
 
 ## Low-Level API
