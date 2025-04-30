@@ -33,7 +33,7 @@ await Task.Delay(Timeout.Infinite);
 > * Authorization
 > * Cancellation
 > * Progress
-> * Logginp
+> * Logging
 
 ## Why not C# SDK?
 
