@@ -1,10 +1,9 @@
 using System.Collections.Concurrent;
 using System.Text.Json;
-using System.Threading.Channels;
 
 namespace McpToolkit.JsonRpc;
 
-public sealed class JsonRpcEndpoint(Func<CancellationToken, ValueTask<string?>> readFunc, Func<string, CancellationToken, ValueTask> writeFunc)
+public sealed class JsonRpcEndpoint(Func<CancellationToken, ValueTask<string?>> readFunc, Func<string, CancellationToken, ValueTask> writeFunc, Func<string, CancellationToken, ValueTask> errorWriteFunc)
 {
     readonly ConcurrentDictionary<RequestId, TaskCompletionSource<JsonRpcResponse>> pendingRequests = new();
     readonly ConcurrentDictionary<string, Func<JsonRpcRequest, CancellationToken, ValueTask<JsonRpcResponse>>> requestHandlers = new();
@@ -80,7 +79,7 @@ public sealed class JsonRpcEndpoint(Func<CancellationToken, ValueTask<string?>> 
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine(ex);
+                await errorWriteFunc(ex.ToString(), cancellationToken);
             }
         }
     }

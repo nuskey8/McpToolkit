@@ -13,6 +13,11 @@ public sealed class StdioServerTransport : IMcpTransport
         {
             await Console.Out.WriteLineAsync(json.AsMemory(), ct);
             await Console.Out.FlushAsync(ct);
+        },
+        static async (ex, ct) =>
+        {
+            await Console.Error.WriteLineAsync(ex);
+            await Console.Error.FlushAsync(ct);
         });
 
     CancellationTokenSource cts = new();

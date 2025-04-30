@@ -30,6 +30,11 @@ public sealed class StdioClientTransport : IMcpTransport
             {
                 await process!.StandardInput.WriteLineAsync(json.AsMemory(), ct);
                 await process.StandardInput.FlushAsync(ct);
+            },
+            (ex, ct) =>
+            {
+                // Ignore error
+                return default;
             });
     }
 
