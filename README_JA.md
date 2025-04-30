@@ -134,7 +134,7 @@ await using var server = new McpServer
 server.Tools.Add("foo", "Sample tool.", (string message) =>
 {
     return $"test message: {message}";
-})
+});
 
 // stdioをTransportに利用
 await server.ConnectAsync(new StdioServerTransport());
