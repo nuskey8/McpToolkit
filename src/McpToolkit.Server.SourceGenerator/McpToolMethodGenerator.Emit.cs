@@ -65,12 +65,11 @@ partial class McpToolMethodGenerator
             }
         }
 
-        foreach (var group in toolMethodGroup.GroupBy(x => x.DelegateType))
+        using (builder.BeginBlock($"public static partial void Add(this global::McpToolkit.Server.IMcpServerTools tools, string name, string? description, global::System.Delegate action)"))
         {
-            using var _1 = builder.BeginBlock($"public static void Add(this global::McpToolkit.Server.IMcpServerTools tools, string name, string? description, {group.Key} action)");
             using var _2 = builder.BeginBlock("switch (name)");
 
-            foreach (var (meta, delegateType) in group.Distinct())
+            foreach (var (meta, delegateType) in toolMethodGroup)
             {
                 builder.AppendLine($"case \"{meta.Name}\":");
                 using var _ = builder.BeginBlock();

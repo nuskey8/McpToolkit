@@ -91,7 +91,7 @@ internal static class Parser
         {
             Name = toolName,
             Description = toolDescription,
-            InvocationSymbol = "action",
+            InvocationSymbol = $"(({lambdaType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)})action)",
             ReturnType = new(lambdaReturnType!),
             ReturnTypeName = lambdaReturnType?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat),
             Parameters = new(parameters),

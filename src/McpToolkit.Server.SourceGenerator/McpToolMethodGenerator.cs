@@ -19,10 +19,7 @@ namespace McpToolkit.Server
 {
     internal static partial class GeneratedMcpServerToolsExtensions
     {
-        public static void Add(this global::McpToolkit.Server.IMcpServerTools tools, string name, string? description, global::System.Delegate action)
-        {
-            throw new global::System.NotSupportedException("The code is not generated correctly");
-        }
+        public static partial void Add(this global::McpToolkit.Server.IMcpServerTools tools, string name, string? description, global::System.Delegate action);
     }
 }
 """);
