@@ -38,15 +38,15 @@ partial class McpToolMethodGenerator
                 }
 
                 string delegateType;
-                if (meta.ReturnType != null)
+                if (meta.ReturnTypeName != null)
                 {
                     if (meta.Parameters.Length == 0)
                     {
-                        delegateType = $"Func<{meta.ReturnType}>";
+                        delegateType = $"Func<{meta.ReturnTypeName}>";
                     }
                     else
                     {
-                        delegateType = $"Func<{string.Join(", ", meta.Parameters.Array.Select(x => x.Type))}, {meta.ReturnType}>";
+                        delegateType = $"Func<{string.Join(", ", meta.Parameters.Array.Select(x => x.Type))}, {meta.ReturnTypeName}>";
                     }
                 }
                 else
@@ -103,6 +103,7 @@ $$"""
 #nullable enable
 #pragma warning disable
 
+using System.Linq;
 using System.Text.Json;
 
 namespace McpToolkit.Server

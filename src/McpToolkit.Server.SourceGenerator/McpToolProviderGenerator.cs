@@ -56,6 +56,7 @@ public class McpToolProviderGenerator : IIncrementalGenerator
         builder.AppendLine("#nullable enable");
         builder.AppendLine("#pragma warning disable");
         builder.AppendLine();
+        builder.AppendLine("using System.Linq;");
         builder.AppendLine("using System.Text.Json;");
         builder.AppendLine();
 
