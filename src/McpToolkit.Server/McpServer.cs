@@ -177,6 +177,7 @@ public sealed class McpServer : IMcpServer
         Tools = new() { ListChanged = true },
         Resources = new() { ListChanged = true },
         Prompts = new() { ListChanged = true },
+        Logging = new(),
     };
 
     public IServiceProvider? ServiceProvider { get; init; }
