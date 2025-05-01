@@ -86,7 +86,7 @@ public static class McpClientExtensions
             var result = await tools.ListAsync(new ListToolsRequestParams()
             {
                 Cursor = cursor
-            }, cancellationToken).ConfigureAwait(false);
+            }, cancellationToken);
 
             foreach (var tool in result.Tools)
             {
@@ -106,7 +106,7 @@ public static class McpClientExtensions
             var result = await resources.ListAsync(new ListResourcesRequestParams()
             {
                 Cursor = cursor
-            }, cancellationToken).ConfigureAwait(false);
+            }, cancellationToken);
 
             foreach (var resource in result.Resources)
             {
@@ -126,7 +126,7 @@ public static class McpClientExtensions
             var result = await resources.ListTemplatesAsync(new ListResourceTemplatesRequestParams()
             {
                 Cursor = cursor
-            }, cancellationToken).ConfigureAwait(false);
+            }, cancellationToken);
 
             foreach (var resourceTemplate in result.ResourceTemplates)
             {
@@ -146,7 +146,7 @@ public static class McpClientExtensions
             var result = await prompts.ListAsync(new ListPromptsRequestParams()
             {
                 Cursor = cursor
-            }, cancellationToken).ConfigureAwait(false);
+            }, cancellationToken);
 
             foreach (var prompt in result.Prompts)
             {
