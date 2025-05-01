@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace McpToolkit;
@@ -51,5 +52,5 @@ public record LoggingMessageNotificationParams : RequestParams
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public object? Data { get; init; }
+    public JsonElement? Data { get; init; }
 }

@@ -18,4 +18,5 @@ public static class NotificationSchema
     public static readonly INotificationSchema<ToolListChangedNotificationParams> ToolListChangedNotification = new Schema<ToolListChangedNotificationParams>(McpMethods.Notifications.ToolListChanged);
     public static readonly INotificationSchema<ResourceListChangedNotificationParams> ResourceListChangedNotification = new Schema<ResourceListChangedNotificationParams>(McpMethods.Notifications.ResourceListChanged);
     public static readonly INotificationSchema<ResourceUpdatedNotificationParams> ResourceUpdatedNotification = new Schema<ResourceUpdatedNotificationParams>(McpMethods.Notifications.ResourceUpdated);
+    public static readonly INotificationSchema<LoggingMessageNotificationParams> LoggingMessageNotification = new Schema<LoggingMessageNotificationParams>(McpMethods.Notifications.Message);
 }
