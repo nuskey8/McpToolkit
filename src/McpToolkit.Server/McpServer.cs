@@ -165,6 +165,11 @@ public sealed class McpServer : IMcpServer
 
         public void Log(LoggingMessageNotificationParams notification, CancellationToken cancellationToken = default)
         {
+            if (server.Capabilities.Logging == null)
+            {
+                throw new InvalidOperationException("Server does not support logging");
+            }
+
             if ((int)LoggingLevel > (int)notification.Level) return;
             server.TrySendNotification(McpMethods.Notifications.Message, notification);
         }
