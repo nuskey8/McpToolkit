@@ -52,7 +52,7 @@ public interface IMcpClientPing
 public interface IMcpClientLogging
 {
     ValueTask<EmptyResult> SetLevelAsync(SetLevelRequestParams request, CancellationToken cancellationToken = default);
-    Action<LoggingMessageNotificationParams> Log { get; set; }
+    void SetLogger(Action<LoggingMessageNotificationParams> logAction);
 }
 
 public class McpClient : IMcpClient
@@ -129,11 +129,14 @@ public class McpClient : IMcpClient
 
     sealed class ClientLogging(McpClient client) : IMcpClientLogging
     {
-        public Action<LoggingMessageNotificationParams> Log { get; set; } = x => Console.WriteLine(x.Data);
-
         public ValueTask<EmptyResult> SetLevelAsync(SetLevelRequestParams request, CancellationToken cancellationToken = default)
         {
             return client.SendRequestAsync<SetLevelRequestParams, EmptyResult>(McpMethods.Logging.SetLevel, request, cancellationToken);
+        }
+
+        public void SetLogger(Action<LoggingMessageNotificationParams> logAction)
+        {
+            client.logAction = logAction;
         }
     }
 
@@ -154,6 +157,7 @@ public class McpClient : IMcpClient
 
     IMcpTransport? transport;
     CancellationTokenSource clientCts = new();
+    Action<LoggingMessageNotificationParams>? logAction;
 
     public IMcpClientTools Tools { get; }
     public IMcpClientResources Resources { get; }
@@ -175,6 +179,11 @@ public class McpClient : IMcpClient
 
         this.SetRequestHandler(RequestSchema.ListRootsRequest, DefaultListRootsHandler);
         this.SetNotificationHandler(NotificationSchema.LoggingMessageNotification, DefaultLoggingMessageHandler);
+
+        logAction = x =>
+        {
+            Console.WriteLine($"{x.Level}: {(x.Logger == null ? "" : $"{x.Logger} - ")}{x.Data}");
+        };
     }
 
     public void SetRequestHandler(string methodName, Func<JsonRpcRequest, CancellationToken, ValueTask<JsonRpcResponse>> handler)
@@ -268,7 +277,7 @@ public class McpClient : IMcpClient
     {
         if (notification != null)
         {
-            Logging.Log?.Invoke(notification);
+            logAction?.Invoke(notification);
         }
         return default;
     }
