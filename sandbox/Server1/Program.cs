@@ -24,6 +24,6 @@ partial class Tools
     [McpTool("roll_dice")]
     public static string RollDice()
     {
-        return Random.Shared.Next(0, 7).ToString();
+        return Random.Shared.Next(1, 7).ToString();
     }
 }
