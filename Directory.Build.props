@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <!-- NuGet Packaging -->
-        <PackageVersion>0.1.2</PackageVersion>
+        <PackageVersion>0.1.3</PackageVersion>
         <Authors>nuskey</Authors>
         <Copyright>© Yusuke Nakada</Copyright>
         <PackageProjectUrl>https://github.com/nuskey8/McpToolkit</PackageProjectUrl>
