@@ -32,7 +32,7 @@ public sealed class JsonRpcEndpoint(Func<CancellationToken, ValueTask<string?>> 
                 if (string.IsNullOrWhiteSpace(line)) continue;
 
                 var trimmedLineSpan = line.AsSpan().Trim();
-                if (!trimmedLineSpan.StartsWith('{') || !trimmedLineSpan.EndsWith('}')) continue; // skip non-json input
+                if (trimmedLineSpan.Length < 2 || trimmedLineSpan[0] != '{' || trimmedLineSpan[^1] != '}') continue; // skip non-json input
 
                 var message = JsonSerializer.Deserialize(line, McpJsonSerializerContext.Default.Options.GetTypeInfo<JsonRpcMessage>()!);
 
