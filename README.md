@@ -33,7 +33,6 @@ await Task.Delay(Timeout.Infinite);
 > * Authorization
 > * Cancellation
 > * Progress
-> * Logging
 
 ## Why not C# SDK?
 
@@ -89,7 +88,7 @@ MCP Toolkit analyzes the lambda expressions passed to `server.Tools.Add()` and g
 
 Unlike the C# SDK, which depends on `Microsoft.Extensions.AI` and `Microsoft.Extensions.Hosting`, MCP Toolkit has no external dependencies.
 
-While MCP is a protocol for integrating LLMs with applications, MCP itself is a simple JSON-RPC and does not inherently include LLM-related features. Therefore, the functionality provided by `Microsoft.Extensions.AI` is unnecessary for implementing a basic MCP server, making it an unnecessary dependency.
+While MCP is a protocol for integrating LLMs with applications, MCP itself is a simple JSON-RPC and does not inherently include LLM-related features. Therefore, the functionality provided by `Microsoft.Extensions.AI` is unnecessary for implementing a basic MCP server.
 
 Integration with `Microsoft.Extensions.Hosting` is optional in MCP Toolkit and is provided as an extension package. `Microsoft.Extensions.Hosting` is a large package, and its dependency can significantly increase binary size, especially in Native AOT scenarios. While Generic Host is powerful for web application implementations, it is not essential for implementing local MCP servers/clients.
 
