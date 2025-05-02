@@ -12,6 +12,7 @@ public interface IMcpClient : IAsyncDisposable
     IMcpClientPrompts Prompts { get; }
     IMcpClientRoots Roots { get; }
     IMcpClientPing Ping { get; }
+
     bool IsConnected { get; }
 
     ValueTask ConnectAsync(IMcpTransport transport, CancellationToken cancellationToken = default);
@@ -46,6 +47,12 @@ public interface IMcpClientRoots
 public interface IMcpClientPing
 {
     ValueTask<EmptyResult> SendAsync(CancellationToken cancellationToken = default);
+}
+
+public interface IMcpClientLogging
+{
+    ValueTask<EmptyResult> SetLevelAsync(SetLevelRequestParams request, CancellationToken cancellationToken = default);
+    void SetLogger(Action<LoggingMessageNotificationParams> logAction);
 }
 
 public class McpClient : IMcpClient
@@ -120,6 +127,19 @@ public class McpClient : IMcpClient
         }
     }
 
+    sealed class ClientLogging(McpClient client) : IMcpClientLogging
+    {
+        public ValueTask<EmptyResult> SetLevelAsync(SetLevelRequestParams request, CancellationToken cancellationToken = default)
+        {
+            return client.SendRequestAsync<SetLevelRequestParams, EmptyResult>(McpMethods.Logging.SetLevel, request, cancellationToken);
+        }
+
+        public void SetLogger(Action<LoggingMessageNotificationParams> logAction)
+        {
+            client.logAction = logAction;
+        }
+    }
+
     public string Name { get; init; } = "";
     public string Version { get; init; } = "0.0.1";
     public string ProtocolVersion { get; init; } = "2025-03-26";
@@ -137,12 +157,14 @@ public class McpClient : IMcpClient
 
     IMcpTransport? transport;
     CancellationTokenSource clientCts = new();
+    Action<LoggingMessageNotificationParams>? logAction;
 
     public IMcpClientTools Tools { get; }
     public IMcpClientResources Resources { get; }
     public IMcpClientPrompts Prompts { get; }
     public IMcpClientRoots Roots { get; }
     public IMcpClientPing Ping { get; }
+    public IMcpClientLogging Logging { get; }
 
     public bool IsConnected => transport != null;
 
@@ -153,8 +175,15 @@ public class McpClient : IMcpClient
         Prompts = new ClientPrompts(this);
         Roots = new ClientRoots(this);
         Ping = new ClientPing(this);
+        Logging = new ClientLogging(this);
 
         this.SetRequestHandler(RequestSchema.ListRootsRequest, DefaultListRootsHandler);
+        this.SetNotificationHandler(NotificationSchema.LoggingMessageNotification, DefaultLoggingMessageHandler);
+
+        logAction = x =>
+        {
+            Console.WriteLine($"{x.Level}: {(x.Logger == null ? "" : $"{x.Logger} - ")}{x.Data}");
+        };
     }
 
     public void SetRequestHandler(string methodName, Func<JsonRpcRequest, CancellationToken, ValueTask<JsonRpcResponse>> handler)
@@ -242,6 +271,15 @@ public class McpClient : IMcpClient
         {
             Roots = roots.ToArray(),
         });
+    }
+
+    ValueTask DefaultLoggingMessageHandler(LoggingMessageNotificationParams? notification, CancellationToken cancellationToken)
+    {
+        if (notification != null)
+        {
+            logAction?.Invoke(notification);
+        }
+        return default;
     }
 
     async ValueTask<TResult> SendRequestAsync<TParams, TResult>(string method, TParams requestParams, CancellationToken cancellationToken = default)

@@ -45,6 +45,7 @@ public static class McpMethods
         public const string RootListChanged = "notifications/roots/list_changed";
         public const string Cancelled = "notifications/cancelled";
         public const string Progress = "notifications/progress";
+        public const string Message = "notifications/message";
     }
 
     public static class Completion

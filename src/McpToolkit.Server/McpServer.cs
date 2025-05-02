@@ -11,6 +11,9 @@ public interface IMcpServer : IAsyncDisposable
     IMcpServerPrompts Prompts { get; }
     IMcpServerTools Tools { get; }
     IMcpServerResources Resources { get; }
+    IMcpServerRoots Roots { get; }
+    IMcpServerSampling Sampling { get; }
+    IMcpServerLogging Logging { get; }
 
     bool IsConnected { get; }
 
@@ -46,6 +49,12 @@ public interface IMcpServerRoots
 public interface IMcpServerSampling
 {
     ValueTask<CreateMessageResult> CreateMessageAsync(CreateMessageRequestParams request, CancellationToken cancellationToken = default);
+}
+
+public interface IMcpServerLogging
+{
+    LoggingLevel LoggingLevel { get; set; }
+    void Log(LoggingMessageNotificationParams notification, CancellationToken cancellationToken = default);
 }
 
 public sealed class McpServer : IMcpServer
@@ -150,6 +159,22 @@ public sealed class McpServer : IMcpServer
         }
     }
 
+    sealed class ServerLogging(McpServer server) : IMcpServerLogging
+    {
+        public LoggingLevel LoggingLevel { get; set; } = LoggingLevel.Debug;
+
+        public void Log(LoggingMessageNotificationParams notification, CancellationToken cancellationToken = default)
+        {
+            if (server.Capabilities.Logging == null)
+            {
+                throw new InvalidOperationException("Server does not support logging");
+            }
+
+            if ((int)LoggingLevel > (int)notification.Level) return;
+            server.TrySendNotification(McpMethods.Notifications.Message, notification);
+        }
+    }
+
     public string Name { get; init; } = "";
     public string Version { get; init; } = "0.0.1";
     public ServerCapabilities Capabilities { get; init; } = new()
@@ -157,6 +182,7 @@ public sealed class McpServer : IMcpServer
         Tools = new() { ListChanged = true },
         Resources = new() { ListChanged = true },
         Prompts = new() { ListChanged = true },
+        Logging = new(),
     };
 
     public IServiceProvider? ServiceProvider { get; init; }
@@ -166,6 +192,7 @@ public sealed class McpServer : IMcpServer
     public IMcpServerResources Resources { get; }
     public IMcpServerRoots Roots { get; }
     public IMcpServerSampling Sampling { get; }
+    public IMcpServerLogging Logging { get; }
 
     public bool IsConnected => transport != null;
 
@@ -187,6 +214,7 @@ public sealed class McpServer : IMcpServer
         Resources = new ServerResources(this);
         Roots = new ServerRoots(this);
         Sampling = new ServerSampling(this);
+        Logging = new ServerLogging(this);
 
         this.SetRequestHandler(RequestSchema.InitializeRequest, DefaultInitializeHandler);
         this.SetRequestHandler(RequestSchema.PintRequest, DefaultPingHandler);

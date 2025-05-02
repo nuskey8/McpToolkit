@@ -56,6 +56,59 @@ public static class McpServerExtensions
         });
     }
 
+#pragma warning disable IL2026
+#pragma warning disable IL3050
+    public static void Log(this IMcpServerLogging logging, LoggingLevel level, string? message)
+    {
+        logging.Log(new()
+        {
+            Level = level,
+            Data = JsonSerializer.SerializeToElement(message, JsonSerializerOptions.Default.GetTypeInfo(typeof(string)))
+        });
+    }
+#pragma warning restore IL3050
+#pragma warning restore IL2026
+
+    public static void LogDebug(this IMcpServerLogging logging, string? message)
+    {
+        logging.Log(LoggingLevel.Debug, message);
+    }
+
+    public static void LogInfo(this IMcpServerLogging logging, string? message)
+    {
+        logging.Log(LoggingLevel.Info, message);
+    }
+
+    public static void LogNotice(this IMcpServerLogging logging, string? message)
+    {
+        logging.Log(LoggingLevel.Notice, message);
+    }
+
+    public static void LogWarning(this IMcpServerLogging logging, string? message)
+    {
+        logging.Log(LoggingLevel.Warning, message);
+    }
+
+    public static void LogError(this IMcpServerLogging logging, string? message)
+    {
+        logging.Log(LoggingLevel.Error, message);
+    }
+
+    public static void LogCritical(this IMcpServerLogging logging, string? message)
+    {
+        logging.Log(LoggingLevel.Critical, message);
+    }
+
+    public static void LogAlert(this IMcpServerLogging logging, string? message)
+    {
+        logging.Log(LoggingLevel.Alert, message);
+    }
+
+    public static void LogEmergency(this IMcpServerLogging logging, string? message)
+    {
+        logging.Log(LoggingLevel.Emergency, message);
+    }
+
     public static void SetRequestHandler<TParams, TResult>(this IMcpServer server, IRequestSchema<TParams, TResult> schema, Func<TParams?, CancellationToken, ValueTask<TResult>> handler)
     {
         server.SetRequestHandler(schema.Method, async (request, ct) =>
