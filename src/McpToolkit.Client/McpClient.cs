@@ -12,6 +12,8 @@ public interface IMcpClient : IAsyncDisposable
     IMcpClientPrompts Prompts { get; }
     IMcpClientRoots Roots { get; }
     IMcpClientPing Ping { get; }
+    IMcpClientLogging Logging { get; }
+    IMcpClientCompletion Completion { get; }
 
     bool IsConnected { get; }
 
@@ -53,6 +55,11 @@ public interface IMcpClientLogging
 {
     ValueTask<EmptyResult> SetLevelAsync(SetLevelRequestParams request, CancellationToken cancellationToken = default);
     void SetLogger(Action<LoggingMessageNotificationParams> logAction);
+}
+
+public interface IMcpClientCompletion
+{
+    ValueTask<CompleteResult> ComplateAsync(CompleteRequestParams request, CancellationToken cancellationToken = default);
 }
 
 public class McpClient : IMcpClient
@@ -140,6 +147,14 @@ public class McpClient : IMcpClient
         }
     }
 
+    sealed class ClientCompletion(McpClient client) : IMcpClientCompletion
+    {
+        public ValueTask<CompleteResult> ComplateAsync(CompleteRequestParams request, CancellationToken cancellationToken = default)
+        {
+            return client.SendRequestAsync<CompleteRequestParams, CompleteResult>(McpMethods.Completion.Complete, request, cancellationToken);
+        }
+    }
+
     public string Name { get; init; } = "";
     public string Version { get; init; } = "0.0.1";
     public string ProtocolVersion { get; init; } = "2025-03-26";
@@ -165,6 +180,7 @@ public class McpClient : IMcpClient
     public IMcpClientRoots Roots { get; }
     public IMcpClientPing Ping { get; }
     public IMcpClientLogging Logging { get; }
+    public IMcpClientCompletion Completion { get; }
 
     public bool IsConnected => transport != null;
 
@@ -176,6 +192,7 @@ public class McpClient : IMcpClient
         Roots = new ClientRoots(this);
         Ping = new ClientPing(this);
         Logging = new ClientLogging(this);
+        Completion = new ClientCompletion(this);
 
         this.SetRequestHandler(RequestSchema.ListRootsRequest, DefaultListRootsHandler);
         this.SetNotificationHandler(NotificationSchema.LoggingMessageNotification, DefaultLoggingMessageHandler);
